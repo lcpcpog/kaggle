@@ -10,7 +10,7 @@ def salvar_movimentacoes():
         json.dump(movimentacoes, f, ensure_ascii=False, indent=2)
 
 def carregar_movimentacoes():
-    global movimentacoes
+    movimentacoes
     if os.path.exists('movimentacoes.json'):
         with open('movimentacoes.json', 'r', encoding='utf-8') as f:
             movimentacoes = json.load(f)
