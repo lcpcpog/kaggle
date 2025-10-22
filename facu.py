@@ -84,31 +84,27 @@ def consultar_movimentacoes():
         print('Nenhuma movimentação registrada.\n')
         return
 
-    # filtro por período
+    
     data_inicio = input('Data inicial (YYYY-MM-DD) [vazio = sem filtro]: ')
     data_fim = input('Data final (YYYY-MM-DD) [vazio = sem filtro]: ')
-
-    # filtro por categorias
     categorias_input = input('Categorias separadas por vírgula [vazio = todas]: ')
+
+    # cria lista de categorias se o usuário digitar algo
     categorias = [c.strip() for c in categorias_input.split(',')] if categorias_input else None
 
-    resultado = []
+    encontrado = False  
+
+    print('\n=== Resultados da Consulta ===')
     for mov in movimentacoes:
-        if data_inicio and mov['data'] < data_inicio:
-            continue
-        if data_fim and mov['data'] > data_fim:
-            continue
-        if categorias and mov['categoria'] not in categorias:
-            continue
-        resultado.append(mov)
+        if (not data_inicio or mov['data'] >= data_inicio) and \
+           (not data_fim or mov['data'] <= data_fim) and \
+           (not categorias or mov['categoria'] in categorias):
+            print(f'{mov["data"]} - {mov["descricao"]} ({mov["categoria"]}): R$ {mov["valor"]:.2f}')
+            encontrado = True
 
-    if not resultado:
-        print('Nenhuma movimentação encontrada com esses filtros.\n')
-        return
+    if not encontrado:
+        print('Nenhuma movimentação encontrada.')
 
-    print('=== Movimentações Filtradas ===')
-    for i, mov in enumerate(resultado, start=1):
-        print(f'{i}. {mov["data"]} - {mov["descricao"]} ({mov["categoria"]}): R$ {mov["valor"]:.2f}')
     print()
 
 # Estatísticas financeiras
